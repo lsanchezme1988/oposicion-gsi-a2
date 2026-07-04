@@ -2,6 +2,6 @@
   "temas": [
     { "id": "BI-T6", "nombre": "Bloque I · Tema 6", "archivo": "BIT6.json" },
     { "id": "BI-T7", "nombre": "Bloque I · Tema 7", "archivo": "BIT7.json" },
-    { "id": "BI-T8", "nombre": "Bloque I · Tema 8", "archivo": "BIT8.json" }
+    { "id": "BIT8", "nombre": "Bloque I · Tema 8", "archivo": "BIT8.json" }
   ]
 }
