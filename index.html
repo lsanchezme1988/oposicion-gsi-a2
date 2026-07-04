@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Test GSI A2</title>
+<style>
+  /* ===== CONFIGURA AQUÍ ===== */
+  /* Cuando tengas tu repositorio de GitHub, cambia esta línea (búscala también en el JS más abajo, variable BASE_URL) */
+</style>
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --paper:#ffffff;
+    --paper-soft:#f7f7f5;
+    --line:#e2e0da;
+    --navy:#1e3a5f;
+    --navy-soft:#eaf0f6;
+    --good:#2e7d32;
+    --good-soft:#eaf5ea;
+    --bad:#c62828;
+    --bad-soft:#fbebea;
+    --warn:#b8860b;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper-soft);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:16px 20px;
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  header h1{
+    font-size:16px;
+    font-weight:600;
+    margin:0;
+    letter-spacing:0.2px;
+  }
+  header .sub{
+    font-size:12px;
+    opacity:0.75;
+    margin-top:2px;
+  }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.4);
+    color:#fff;
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:16px;
+  }
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .status-msg{
+    text-align:center;
+    padding:40px 16px;
+    color:#555;
+    font-size:14px;
+    line-height:1.6;
+  }
+  .status-msg.error{
+    color:var(--bad);
+  }
+  code{
+    background:var(--paper-soft);
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:12px;
+  }
+  /* Selección de temas */
+  .tema-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .tema-row:last-child{border-bottom:none;}
+  .tema-row input{width:18px;height:18px;flex-shrink:0;}
+  .tema-info{flex:1;}
+  .tema-nombre{font-size:14.5px;font-weight:500;}
+  .tema-meta{font-size:12px;color:#777;margin-top:2px;}
+  .tema-fallos{font-size:11px;color:var(--bad);margin-top:2px;font-weight:600;}
+  .section-title{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    color:#777;
+    margin:0 0 10px 0;
+    font-weight:600;
+  }
+  .config-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    font-size:13px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .chip.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:#fff;
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:var(--radius);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .btn-primary:disabled{
+    background:#b7b7b7;
+    cursor:not-allowed;
+  }
+  .btn-secondary{
+    width:100%;
+    background:var(--paper);
+    color:var(--navy);
+    border:1px solid var(--navy);
+    padding:12px;
+    border-radius:var(--radius);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  /* Quiz */
+  .progress-bar{
+    height:5px;
+    background:var(--line);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:16px;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--navy);
+    transition:width 0.25s ease;
+  }
+  .q-meta{
+    font-size:12px;
+    color:#777;
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .q-text{
+    font-size:16px;
+    line-height:1.5;
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .option{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius);
+    padding:13px 14px;
+    margin-bottom:10px;
+    font-size:14.5px;
+    line-height:1.4;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .option.correct{
+    background:var(--good-soft);
+    border-color:var(--good);
+    color:var(--good);
+    font-weight:600;
+  }
+  .option.incorrect{
+    background:var(--bad-soft);
+    border-color:var(--bad);
+    color:var(--bad);
+    font-weight:600;
+  }
+  .option:disabled{cursor:default;}
+  .explicacion{
+    background:var(--navy-soft);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    font-size:13.5px;
+    line-height:1.5;
+    margin-top:6px;
+    margin-bottom:14px;
+  }
+  .trap-tag{
+    display:inline-block;
+    background:#fff3cd;
+    color:var(--warn);
+    font-size:11px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:4px;
+    margin-bottom:10px;
+  }
+  /* Resultados */
+  .score-big{
+    text-align:center;
+    padding:20px 0 10px 0;
+  }
+  .score-big .num{
+    font-size:42px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .score-big .label{
+    font-size:13px;
+    color:#777;
+  }
+  .fallo-item{
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+  }
+  .fallo-item:last-child{border-bottom:none;}
+  .fallo-q{font-size:14px;font-weight:600;margin-bottom:6px;}
+  .fallo-detail{font-size:13px;color:#555;line-height:1.5;}
+  .fallo-detail .ok{color:var(--good);font-weight:600;}
+  .fallo-detail .no{color:var(--bad);font-weight:600;}
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:#999;
+    padding:24px 16px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Test GSI A2</h1>
+    <div class="sub" id="header-sub">Cargando temario…</div>
+  </div>
+  <button class="btn-ghost" id="btn-inicio" style="display:none;" onclick="volverInicio()">Inicio</button>
+</header>
+
+<main id="app"></main>
+
+<footer>Datos cargados desde tu repositorio · el progreso se guarda solo en este dispositivo</footer>
+
+<script>
+/* =========================================================
+   CONFIGURA AQUÍ: pega la URL base de tu repositorio de GitHub Pages
+   Ejemplo: "https://raw.githubusercontent.com/TU-USUARIO/TU-REPO/main/"
+   (nota la barra final "/")
+   ========================================================= */
+const BASE_URL = "https://raw.githubusercontent.com/lsanchezme1988/oposicion-gsi-a2/main/";
+
+let manifest = null;
+let temasSeleccionados = [];
+let bancoPreguntas = [];
+let preguntasQuiz = [];
+let indiceActual = 0;
+let respuestasUsuario = [];
+let modoRepaso = false;
+
+const app = document.getElementById('app');
+const headerSub = document.getElementById('header-sub');
+const btnInicio = document.getElementById('btn-inicio');
+
+function volverInicio(){
+  btnInicio.style.display = 'none';
+  headerSub.textContent = manifest ? `${manifest.temas.length} temas disponibles` : '';
+  renderSeleccionTemas();
+}
+
+function getFallos(temaId){
+  try{
+    const raw = localStorage.getItem('fallos_' + temaId);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function guardarFallo(temaId, preguntaId, fallo){
+  const data = getFallos(temaId);
+  data[preguntaId] = fallo ? (data[preguntaId]||0)+1 : 0;
+  try{ localStorage.setItem('fallos_' + temaId, JSON.stringify(data)); }catch(e){}
+}
+function contarFallosTema(temaId){
+  const data = getFallos(temaId);
+  return Object.values(data).filter(v => v > 0).length;
+}
+
+async function cargarManifest(){
+  app.innerHTML = `<div class="status-msg">Cargando lista de temas…</div>`;
+  try{
+    const res = await fetch(BASE_URL + 'manifest.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    manifest = await res.json();
+    if(!manifest.temas || !manifest.temas.length) throw new Error('El manifest no tiene temas');
+    headerSub.textContent = `${manifest.temas.length} temas disponibles`;
+    renderSeleccionTemas();
+  }catch(err){
+    app.innerHTML = `
+      <div class="status-msg error">
+        <strong>No se pudo cargar el temario.</strong><br><br>
+        Revisa que BASE_URL esté bien configurada en el archivo HTML y que <code>manifest.json</code>
+        exista y sea público en tu repositorio.<br><br>
+        Detalle técnico: ${err.message}
+      </div>`;
+  }
+}
+
+function renderSeleccionTemas(){
+  let filas = manifest.temas.map((t, i) => {
+    const fallos = contarFallosTema(t.id);
+    return `
+      <label class="tema-row">
+        <input type="checkbox" value="${i}" onchange="toggleTema(${i})" ${temasSeleccionados.includes(i)?'checked':''}>
+        <div class="tema-info">
+          <div class="tema-nombre">${t.nombre}</div>
+          <div class="tema-meta">${t.id}</div>
+          ${fallos > 0 ? `<div class="tema-fallos">${fallos} pregunta(s) con fallos previos</div>` : ''}
+        </div>
+      </label>`;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="section-title">Elige uno o varios temas</div>
+      ${filas}
+    </div>
+    <div class="card">
+      <div class="section-title">Modo</div>
+      <div class="config-row">
+        <div class="chip ${!modoRepaso?'active':''}" onclick="setModo(false)">Todas las preguntas</div>
+        <div class="chip ${modoRepaso?'active':''}" onclick="setModo(true)">Solo mis fallos</div>
+      </div>
+      <div class="section-title" style="margin-top:14px;">Orden</div>
+      <div class="config-row">
+        <div class="chip active" id="chip-random" onclick="toggleOrden()">Aleatorio</div>
+      </div>
+      <button class="btn-primary" id="btn-empezar" onclick="iniciarQuiz()" disabled>Selecciona al menos un tema</button>
+    </div>
+    <div class="card">
+      <div class="section-title">Copia de seguridad de tus fallos</div>
+      <button class="btn-secondary" onclick="exportarFallos()">Exportar mis fallos (descargar archivo)</button>
+      <label class="btn-secondary" style="display:block;text-align:center;">
+        Importar fallos desde archivo
+        <input type="file" accept=".json" style="display:none;" onchange="importarFallos(event)">
+      </label>
+    </div>
+  `;
+}
+
+function exportarFallos(){
+  const backup = {};
+  manifest.temas.forEach(t => {
+    const f = getFallos(t.id);
+    if(Object.keys(f).length) backup[t.id] = f;
+  });
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const fecha = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `fallos-backup-${fecha}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importarFallos(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try{
+      const backup = JSON.parse(e.target.result);
+      Object.keys(backup).forEach(temaId => {
+        localStorage.setItem('fallos_' + temaId, JSON.stringify(backup[temaId]));
+      });
+      alert('Fallos importados correctamente.');
+      renderSeleccionTemas();
+    }catch(err){
+      alert('El archivo no tiene el formato correcto.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+let ordenAleatorio = true;
+function toggleOrden(){
+  ordenAleatorio = !ordenAleatorio;
+  document.getElementById('chip-random').classList.toggle('active', ordenAleatorio);
+  document.getElementById('chip-random').textContent = ordenAleatorio ? 'Aleatorio' : 'En orden';
+}
+
+function setModo(repaso){
+  modoRepaso = repaso;
+  renderSeleccionTemas();
+}
+
+function toggleTema(i){
+  const idx = temasSeleccionados.indexOf(i);
+  if(idx >= 0) temasSeleccionados.splice(idx,1);
+  else temasSeleccionados.push(i);
+  const btn = document.getElementById('btn-empezar');
+  if(btn){
+    btn.disabled = temasSeleccionados.length === 0;
+    btn.textContent = temasSeleccionados.length === 0
+      ? 'Selecciona al menos un tema'
+      : `Empezar test (${temasSeleccionados.length} tema${temasSeleccionados.length>1?'s':''})`;
+  }
+}
+
+async function iniciarQuiz(){
+  app.innerHTML = `<div class="status-msg">Cargando preguntas…</div>`;
+  bancoPreguntas = [];
+  try{
+    for(const i of temasSeleccionados){
+      const tema = manifest.temas[i];
+      const res = await fetch(BASE_URL + tema.archivo, {cache:'no-store'});
+      if(!res.ok) throw new Error(`No se pudo cargar ${tema.archivo}`);
+      const preguntas = await res.json();
+      preguntas.forEach(p => bancoPreguntas.push({...p, temaId: tema.id, temaNombre: tema.nombre}));
+    }
+  }catch(err){
+    app.innerHTML = `<div class="status-msg error">Error cargando preguntas: ${err.message}</div>`;
+    return;
+  }
+
+  if(modoRepaso){
+    bancoPreguntas = bancoPreguntas.filter(p => {
+      const fallos = getFallos(p.temaId);
+      return fallos[p.id] > 0;
+    });
+    if(bancoPreguntas.length === 0){
+      app.innerHTML = `<div class="status-msg">No tienes fallos registrados en los temas seleccionados. ¡Bien hecho!</div>
+        <button class="btn-secondary" onclick="volverInicio()">Volver</button>`;
+      return;
+    }
+  }
+
+  preguntasQuiz = [...bancoPreguntas];
+  if(ordenAleatorio){
+    for(let i = preguntasQuiz.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [preguntasQuiz[i], preguntasQuiz[j]] = [preguntasQuiz[j], preguntasQuiz[i]];
+    }
+  }
+  indiceActual = 0;
+  respuestasUsuario = [];
+  btnInicio.style.display = 'inline-block';
+  renderPregunta();
+}
+
+function renderPregunta(){
+  const p = preguntasQuiz[indiceActual];
+  const pct = Math.round((indiceActual / preguntasQuiz.length) * 100);
+  const opcionesHtml = p.opciones.map((op, i) =>
+    `<button class="option" onclick="responder(${i})">${op}</button>`
+  ).join('');
+
+  app.innerHTML = `
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="q-meta"><span>${p.temaId}</span><span>Pregunta ${indiceActual+1} / ${preguntasQuiz.length}</span></div>
+    <div class="card">
+      <div class="q-text">${p.pregunta}</div>
+      <div id="opciones">${opcionesHtml}</div>
+    </div>
+  `;
+}
+
+function responder(i){
+  const p = preguntasQuiz[indiceActual];
+  const botones = document.querySelectorAll('#opciones .option');
+  botones.forEach(b => b.disabled = true);
+  botones[p.correcta].classList.add('correct');
+  const acierto = (i === p.correcta);
+  if(!acierto) botones[i].classList.add('incorrect');
+
+  guardarFallo(p.temaId, p.id, !acierto);
+  respuestasUsuario.push({...p, respuestaUsuario: i, acierto});
+
+  let extra = '';
+  if(p.trampa) extra += `<div class="trap-tag">⚠️ Pregunta trampa</div>`;
+  if(p.explicacion) extra += `<div class="explicacion">${p.explicacion}</div>`;
+
+  const esUltima = indiceActual === preguntasQuiz.length - 1;
+  document.getElementById('opciones').insertAdjacentHTML('afterend', `
+    ${extra}
+    <button class="btn-primary" onclick="siguientePregunta()">${esUltima ? 'Ver resultados' : 'Siguiente'}</button>
+  `);
+}
+
+function siguientePregunta(){
+  indiceActual++;
+  if(indiceActual < preguntasQuiz.length){
+    renderPregunta();
+  }else{
+    renderResultados();
+  }
+}
+
+function renderResultados(){
+  const aciertos = respuestasUsuario.filter(r => r.acierto).length;
+  const total = respuestasUsuario.length;
+  const pct = Math.round((aciertos/total)*100);
+  const fallos = respuestasUsuario.filter(r => !r.acierto);
+
+  let fallosHtml = '';
+  if(fallos.length){
+    fallosHtml = `
+      <div class="card">
+        <div class="section-title">Repaso de fallos (${fallos.length})</div>
+        ${fallos.map(f => `
+          <div class="fallo-item">
+            <div class="fallo-q">${f.pregunta}</div>
+            <div class="fallo-detail">
+              Tu respuesta: <span class="no">${f.opciones[f.respuestaUsuario]}</span><br>
+              Correcta: <span class="ok">${f.opciones[f.correcta]}</span>
+              ${f.explicacion ? `<br>${f.explicacion}` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  }
+
+  app.innerHTML = `
+    <div class="card">
+      <div class="score-big">
+        <div class="num">${aciertos}/${total}</div>
+        <div class="label">${pct}% de aciertos</div>
+      </div>
+      <button class="btn-primary" onclick="volverInicio()">Volver al inicio</button>
+    </div>
+    ${fallosHtml}
+  `;
+}
+
+cargarManifest();
+</script>
+</body>
+</html>
