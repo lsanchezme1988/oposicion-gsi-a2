@@ -1,7 +1,7 @@
 {
   "temas": [
-    { "id": "BI-T6", "nombre": "Bloque I · Tema 6", "archivo": "BI-T6.json" },
-    { "id": "BI-T7", "nombre": "Bloque I · Tema 7", "archivo": "BI-T7.json" },
-    { "id": "BI-T8", "nombre": "Bloque I · Tema 8", "archivo": "BI-T8.json" }
+    { "id": "BI-T6", "nombre": "Bloque I · Tema 6", "archivo": "BIT6.json" },
+    { "id": "BI-T7", "nombre": "Bloque I · Tema 7", "archivo": "BIT7.json" },
+    { "id": "BI-T8", "nombre": "Bloque I · Tema 8", "archivo": "BIT8.json" }
   ]
 }
