@@ -9,7 +9,7 @@
   "advertencia_general": "Contenido extraido tal cual figura en los tres PDF de origen. El primer PDF, aunque forma parte de la carpeta 'TEMA 8', tiene como titulo interno 'TEST OCTAVA SESION-TEMA 10' y trae anotaciones manuscritas/manuales (ej. '*OBSOLETA', 'ART. X RD 311/2022') que se han conservado en el campo 'nota' de cada pregunta afectada. En el PDF 'VARIAS FUENTES' hay un bloque llamado '2015 Cuestionario tema 10' cuyo PDF original marcaba la respuesta correcta en negrita; esa negrita no se conservo en el texto extraido, por lo que la respuesta correcta de ese bloque concreto NO es fiable y se indica como null con una nota. Las preguntas 30 a 50 del bloque final 'TEST EXAMENES REALES' (recopilatorio de examenes reales) proceden de paginas del PDF con maquetacion tipo imagen/escaneo; se han transcrito igualmente pero conviene cotejarlas visualmente contra el PDF si hay dudas.",
   "tests": [
     {
-      "id": "test_1",
+      "id": "BIT8",
       "archivo_origen": "TEST_ANALIZADO_EN_EL_VIDEO-BLOQUE_I-TEMA_8.pdf",
       "titulo_en_pdf": "TEST OCTAVA SESION-TEMA 10",
       "nota_test": "El titulo interno del PDF dice 'TEMA 10', pero el archivo esta clasificado como Bloque I - Tema 8.",
